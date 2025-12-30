@@ -1,4 +1,4 @@
-package com.xp.som.model;
+package com.adenali.fms.model;
 
 import jakarta.persistence.*;
 import lombok.Data;

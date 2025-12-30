@@ -1,4 +1,4 @@
-package com.xp.som;
+package com.adenali.fms;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,4 +1,4 @@
-package com.xp.som.config;
+package com.adenali.fms.config;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

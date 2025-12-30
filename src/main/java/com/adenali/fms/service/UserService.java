@@ -1,7 +1,7 @@
-package com.xp.som.service;
+package com.adenali.fms.service;
 
-import com.xp.som.model.User;
-import com.xp.som.repository.UserRepository;
+import com.adenali.fms.model.User;
+import com.adenali.fms.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;

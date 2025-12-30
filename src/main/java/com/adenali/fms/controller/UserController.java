@@ -1,8 +1,12 @@
-package com.xp.som.controller;
+package com.adenali.fms.controller;
 
-import com.xp.som.constants.ApplicationConstants;
+import com.adenali.fms.constants.ApplicationConstants;
+import com.adenali.fms.model.LoginRequestDTO;
+import com.adenali.fms.model.LoginResponseDTO;
+import com.adenali.fms.model.SignupDto;
+import com.adenali.fms.model.User;
 import com.xp.som.model.*;
-import com.xp.som.service.UserService;
+import com.adenali.fms.service.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;

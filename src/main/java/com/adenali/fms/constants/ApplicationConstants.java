@@ -1,4 +1,4 @@
-package com.xp.som.constants;
+package com.adenali.fms.constants;
 
 
 public final class ApplicationConstants {

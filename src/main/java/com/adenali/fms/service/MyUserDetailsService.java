@@ -1,8 +1,7 @@
-package com.xp.som.service;
+package com.adenali.fms.service;
 
-import com.xp.som.model.User;
+import com.adenali.fms.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

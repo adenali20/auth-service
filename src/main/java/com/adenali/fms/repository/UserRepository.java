@@ -1,6 +1,6 @@
-package com.xp.som.repository;
+package com.adenali.fms.repository;
 
-import com.xp.som.model.User;
+import com.adenali.fms.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

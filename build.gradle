@@ -28,8 +28,6 @@ repositories {
 }
 
 dependencies {
-    // ✅ CONFIG CLIENT
-    implementation 'org.springframework.cloud:spring-cloud-starter-config'
 
     // Web & Security
     implementation 'org.springframework.boot:spring-boot-starter-web'

@@ -1,4 +1,4 @@
-package com.xp.som;
+package com.adenali.fms;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
