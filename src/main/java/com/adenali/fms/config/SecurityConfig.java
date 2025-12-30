@@ -26,7 +26,18 @@ public class SecurityConfig {
                     @Override
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration config = new CorsConfiguration();
-                        config.setAllowedOrigins(List.of("http://localhost:3000","http://localhost:8080","http://138.68.247.139:3000","138.68.247.139:8080","http://dev.adenali.com:3000","https://dev.adenali.com","http://dev.adenali.com","http://adenali.com","http://10.0.0.167:3000"));
+                        config.setAllowedOrigins(List.of(
+                                "http://localhost:3000",
+                                "http://localhost:8080",
+                                "http://138.68.247.139:3000",
+                                "http://138.68.247.139:8080",
+                                "http://dev.adenali.com:3000",
+                                "https://dev.adenali.com",
+                                "http://dev.adenali.com:8080",
+                                "http://dev.adenali.com:3000",
+                                "http://dev.adenali.com",
+                                "http://adenali.com",
+                                "http://10.0.0.167:3000"));
                         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                         config.setAllowedHeaders(List.of("*"));
                         config.setAllowCredentials(true);
