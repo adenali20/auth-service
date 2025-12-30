@@ -39,7 +39,7 @@ jobs:
       - name: Build & Push Dev Docker Image
         run: |
           SHA=$(git rev-parse --short HEAD)
-          IMAGE_NAME=adenli/xp-posts
+          IMAGE_NAME=adenli/auth-service
           IMAGE_TAG=dev-$SHA
           docker build -t $IMAGE_NAME:sha-$SHA .
           docker tag $IMAGE_NAME:sha-$SHA $IMAGE_NAME:$IMAGE_TAG
