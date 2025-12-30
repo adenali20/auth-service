@@ -1,16 +1,15 @@
 package com.adenali.fms.controller;
 
-import com.adenali.fms.constants.ApplicationConstants;
 import com.adenali.fms.model.LoginRequestDTO;
 import com.adenali.fms.model.LoginResponseDTO;
 import com.adenali.fms.model.SignupDto;
 import com.adenali.fms.model.User;
-import com.xp.som.model.*;
 import com.adenali.fms.service.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +33,10 @@ public class UserController {
         private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final Environment env;
+    @Value("${jwt.secret}")
+    private String JWT_SECRET_DEFAULT_VALUE;
+    public  String JWT_SECRET_KEY = "JWT_SECRET";
+    public static final String JWT_HEADER = "Authorization";
     @PostMapping("/user/signup")
     public User addPost(@RequestBody SignupDto signupDto){
         User user = new User();
@@ -55,8 +58,8 @@ public class UserController {
         Authentication authenticationResponse = authenticationManager.authenticate(authentication);
         if(null != authenticationResponse && authenticationResponse.isAuthenticated()) {
             if (null != env) {
-                String secret = env.getProperty(ApplicationConstants.JWT_SECRET_KEY,
-                        ApplicationConstants.JWT_SECRET_DEFAULT_VALUE);
+                String secret = env.getProperty(JWT_SECRET_KEY,
+                        JWT_SECRET_DEFAULT_VALUE);
                 SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
                 jwt = Jwts.builder().issuer("Eazy Bank").subject("JWT Token")
                         .claim("username", authenticationResponse.getName())
@@ -67,7 +70,7 @@ public class UserController {
                         .signWith(secretKey).compact();
             }
         }
-        return ResponseEntity.status(HttpStatus.OK).header(ApplicationConstants.JWT_HEADER,jwt)
+        return ResponseEntity.status(HttpStatus.OK).header(JWT_HEADER,jwt)
                 .body(new LoginResponseDTO(HttpStatus.OK.getReasonPhrase(), jwt));
     }
     @GetMapping("/user/get")

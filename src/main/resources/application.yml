@@ -15,3 +15,9 @@ spring:
       hibernate:
         ddl-auto: update
       show-sql: true
+
+server:
+  port: 8050
+
+jwt:
+  secret: ${JWT_SECRET_KEY}
