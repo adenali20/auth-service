@@ -1,4 +1,4 @@
-package com.adenali.authservice.model;
+package com.xp.som.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;

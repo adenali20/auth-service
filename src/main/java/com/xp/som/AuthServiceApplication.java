@@ -1,4 +1,4 @@
-package com.adenali.authservice;
+package com.xp.som;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

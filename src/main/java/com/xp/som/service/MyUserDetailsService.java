@@ -1,6 +1,6 @@
-package com.adenali.authservice.service;
+package com.xp.som.service;
 
-import com.adenali.authservice.model.User;
+import com.xp.som.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 @Component
-@Profile({"local", "dev"})
+//@Profile({"local", "dev"})
 public class MyUserDetailsService implements UserDetailsService {
 
 

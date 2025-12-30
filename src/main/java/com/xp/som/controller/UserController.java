@@ -1,11 +1,8 @@
-package com.adenali.authservice.controller;
+package com.xp.som.controller;
 
-import com.adenali.authservice.constants.ApplicationConstants;
-import com.adenali.authservice.model.LoginRequestDTO;
-import com.adenali.authservice.model.LoginResponseDTO;
-import com.adenali.authservice.model.SignupDto;
-import com.adenali.authservice.model.User;
-import com.adenali.authservice.service.UserService;
+import com.xp.som.constants.ApplicationConstants;
+import com.xp.som.model.*;
+import com.xp.som.service.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,11 +28,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/authservice")
 public class UserController {
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
-
+        private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final Environment env;
-    public static final String JWT_SECRET_DEFAULT_VALUE = "jxgEQeXHuPq8VdbyYFNkANdudQ53YUn4";
     @PostMapping("/user/signup")
     public User addPost(@RequestBody SignupDto signupDto){
         User user = new User();
@@ -49,14 +45,15 @@ public class UserController {
     }
 
     @PostMapping("/user/login")
-    public ResponseEntity<LoginResponseDTO> apiLogin (@RequestBody LoginRequestDTO loginRequest) {
+    public ResponseEntity<LoginResponseDTO> apiLogin (@RequestBody LoginRequestDTO loginRequest) throws Exception {
         String jwt = "";
         Authentication authentication = UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.username(),
                 loginRequest.password());
         Authentication authenticationResponse = authenticationManager.authenticate(authentication);
         if(null != authenticationResponse && authenticationResponse.isAuthenticated()) {
             if (null != env) {
-                String secret = env.getProperty(ApplicationConstants.JWT_SECRET_KEY,JWT_SECRET_DEFAULT_VALUE);
+                String secret = env.getProperty(ApplicationConstants.JWT_SECRET_KEY,
+                        ApplicationConstants.JWT_SECRET_DEFAULT_VALUE);
                 SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
                 jwt = Jwts.builder().issuer("Eazy Bank").subject("JWT Token")
                         .claim("username", authenticationResponse.getName())

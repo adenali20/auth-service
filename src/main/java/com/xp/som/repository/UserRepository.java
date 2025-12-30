@@ -1,6 +1,6 @@
-package com.adenali.authservice.repository;
+package com.xp.som.repository;
 
-import com.adenali.authservice.model.User;
+import com.xp.som.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

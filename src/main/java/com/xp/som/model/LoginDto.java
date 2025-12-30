@@ -1,4 +1,4 @@
-package com.adenali.authservice.model;
+package com.xp.som.model;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package com.adenali.authservice;
+package com.xp.som;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
