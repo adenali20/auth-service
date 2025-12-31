@@ -1,12 +1,11 @@
 package com.adenali.fms.controller;
 
-import com.adenali.fms.model.LoginRequestDTO;
-import com.adenali.fms.model.LoginResponseDTO;
-import com.adenali.fms.model.SignupDto;
-import com.adenali.fms.model.User;
+import com.adenali.fms.exceptions.EmailAlreadyExistsException;
+import com.adenali.fms.model.*;
 import com.adenali.fms.service.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,16 +37,27 @@ public class UserController {
     public  String JWT_SECRET_KEY = "JWT_SECRET";
     public static final String JWT_HEADER = "Authorization";
     @PostMapping("/user/signup")
-    public User addPost(@RequestBody SignupDto signupDto){
+    public ResponseEntity<RegisterResponse> register(
+            @Valid @RequestBody RegisterRequest request
+    ) {
         User user = new User();
-        user.setUsername(signupDto.getUsername());
-        user.setEmail(signupDto.getEmail());
-        user.setPassword(passwordEncoder.encode(signupDto.getPassword()));
-        if(userService.findUserByUserName(signupDto.getUsername()) != null){
-            return user;
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRole(request.getRole());
+        user.setEnabled(false); // force disabled
+
+        if(userService.findUserByEmail(user.getEmail()) != null){
+            throw new EmailAlreadyExistsException(request.getEmail());
         }
+
         userService.saveUser(user);
-        return userService.findUserByUserName(signupDto.getUsername());
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new RegisterResponse(
+                        "Registration successful. Await admin approval",
+                        null
+                ));
     }
 
     @PostMapping("/user/login")

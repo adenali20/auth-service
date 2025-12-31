@@ -4,16 +4,25 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
+@Table(name = "users")
 @Data
-@Table(name="asomo_user")
 public class User {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;
-    private String email;
-    private String password;
     private String name;
 
+    @Column(unique = true)
+    private String email;
+
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    private boolean enabled = false; // default false
+
+    // getters & setters
 }
