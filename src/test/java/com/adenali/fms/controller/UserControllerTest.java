@@ -2,7 +2,7 @@ package com.adenali.fms.controller;
 
 import com.adenali.fms.model.RegisterRequest;
 import com.adenali.fms.model.Role;
-import com.adenali.fms.model.AppUser;
+import com.adenali.fms.model.User;
 import com.adenali.fms.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(UserController.class)
 @AutoConfigureMockMvc(addFilters = false)
-public class AppUserControllerTest {
+public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
@@ -52,7 +52,7 @@ public class AppUserControllerTest {
 
         Mockito.when(userService.findUserByEmail(request.getEmail())).thenReturn(null);
 
-        Mockito.doNothing().when(userService).saveUser(Mockito.any(AppUser.class));
+        Mockito.doNothing().when(userService).saveUser(Mockito.any(User.class));
 
         mockMvc.perform(post("/api/authservice/user/signup")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -70,7 +70,7 @@ public class AppUserControllerTest {
         request.setPassword("Password@123");
         request.setRole(Role.DRIVER);
 
-        Mockito.when(userService.findUserByEmail(request.getEmail())).thenReturn(new AppUser());
+        Mockito.when(userService.findUserByEmail(request.getEmail())).thenReturn(new User());
 
 
         mockMvc.perform(post("/api/authservice/user/signup")
