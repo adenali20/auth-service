@@ -1,6 +1,6 @@
 package com.adenali.fms.service;
 
-import com.adenali.fms.model.User;
+import com.adenali.fms.model.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,13 +20,13 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userService.findUserByEmail(email);
-        if(user == null){
+        AppUser appUser = userService.findUserByEmail(email);
+        if(appUser == null){
             throw new UsernameNotFoundException(email);
         }
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
         ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(authority);
-        return new org.springframework.security.core.userdetails.User(user.getEmail(),user.getPassword(),authorities);
+        return new org.springframework.security.core.userdetails.User(appUser.getEmail(), appUser.getPassword(),authorities);
     }
 }

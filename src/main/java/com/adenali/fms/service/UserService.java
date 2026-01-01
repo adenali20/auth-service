@@ -1,6 +1,6 @@
 package com.adenali.fms.service;
 
-import com.adenali.fms.model.User;
+import com.adenali.fms.model.AppUser;
 import com.adenali.fms.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +16,13 @@ public class UserService {
     private UserRepository userRepository;
 
 
-    public void saveUser(User user) throws UsernameNotFoundException {
-        log.info("Saving user: {}", user);
-       userRepository.save(user);
+    public void saveUser(AppUser appUser) throws UsernameNotFoundException {
+        log.info("Saving user: {}", appUser);
+       userRepository.save(appUser);
        log.info("User saved successfully");
     }
 
-    public User findUserByEmail(String email) throws UsernameNotFoundException {
+    public AppUser findUserByEmail(String email) throws UsernameNotFoundException {
         return userRepository.findUserByEmail(email);
     }
 }

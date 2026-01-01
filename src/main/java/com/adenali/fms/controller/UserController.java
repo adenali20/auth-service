@@ -9,7 +9,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,7 +30,6 @@ public class UserController {
     private final UserService userService;
         private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    private final Environment env;
     @Value("${jwt.secret}")
     private String JWT_SECRET_DEFAULT_VALUE;
     public  String JWT_SECRET_KEY = "JWT_SECRET";
@@ -41,20 +39,20 @@ public class UserController {
             @Valid @RequestBody RegisterRequest request
     ) {
         log.info("Registering user: {}", request);
-        User user = new User();
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(request.getRole());
-        user.setEnabled(false); // force disabled
+        AppUser appUser = new AppUser();
+        appUser.setName(request.getName());
+        appUser.setEmail(request.getEmail());
+        appUser.setPassword(passwordEncoder.encode(request.getPassword()));
+        appUser.setRole(request.getRole());
+        appUser.setEnabled(false); // force disabled
 
-        if(userService.findUserByEmail(user.getEmail()) != null){
+        if(userService.findUserByEmail(appUser.getEmail()) != null){
             throw new EmailAlreadyExistsException(request.getEmail());
         }
 
-        userService.saveUser(user);
+        userService.saveUser(appUser);
 
-        log.info("User registered successfully: {}", user);
+        log.info("User registered successfully: {}", appUser);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new RegisterResponse(
@@ -70,18 +68,15 @@ public class UserController {
                 loginRequest.password());
         Authentication authenticationResponse = authenticationManager.authenticate(authentication);
         if(null != authenticationResponse && authenticationResponse.isAuthenticated()) {
-            if (null != env) {
-                String secret = env.getProperty(JWT_SECRET_KEY,
-                        JWT_SECRET_DEFAULT_VALUE);
-                SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-                jwt = Jwts.builder().issuer("Eazy Bank").subject("JWT Token")
-                        .claim("username", authenticationResponse.getName())
-                        .claim("authorities", authenticationResponse.getAuthorities().stream().map(
-                                GrantedAuthority::getAuthority).collect(Collectors.joining(",")))
-                        .issuedAt(new java.util.Date())
-                        .expiration(new java.util.Date((new java.util.Date()).getTime() + 30000000))
-                        .signWith(secretKey).compact();
-            }
+            String secret = JWT_SECRET_DEFAULT_VALUE;
+            SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+            jwt = Jwts.builder().issuer("Eazy Bank").subject("JWT Token")
+                    .claim("username", authenticationResponse.getName())
+                    .claim("authorities", authenticationResponse.getAuthorities().stream().map(
+                            GrantedAuthority::getAuthority).collect(Collectors.joining(",")))
+                    .issuedAt(new java.util.Date())
+                    .expiration(new java.util.Date((new java.util.Date()).getTime() + 30000000))
+                    .signWith(secretKey).compact();
         }
         return ResponseEntity.status(HttpStatus.OK).header(JWT_HEADER,jwt)
                 .body(new LoginResponseDTO(HttpStatus.OK.getReasonPhrase(), jwt));
