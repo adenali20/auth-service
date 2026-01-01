@@ -30,7 +30,7 @@ public class UserController {
     private final UserService userService;
         private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    @Value("${jwt.secret}")
+    @Value("${jwt.secret:xyz}")
     private String JWT_SECRET_DEFAULT_VALUE;
     public  String JWT_SECRET_KEY = "JWT_SECRET";
     public static final String JWT_HEADER = "Authorization";
@@ -39,20 +39,20 @@ public class UserController {
             @Valid @RequestBody RegisterRequest request
     ) {
         log.info("Registering user: {}", request);
-        AppUser appUser = new AppUser();
-        appUser.setName(request.getName());
-        appUser.setEmail(request.getEmail());
-        appUser.setPassword(passwordEncoder.encode(request.getPassword()));
-        appUser.setRole(request.getRole());
-        appUser.setEnabled(false); // force disabled
+        User user = new User();
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRole(request.getRole());
+        user.setEnabled(false); // force disabled
 
-        if(userService.findUserByEmail(appUser.getEmail()) != null){
+        if(userService.findUserByEmail(user.getEmail()) != null){
             throw new EmailAlreadyExistsException(request.getEmail());
         }
 
-        userService.saveUser(appUser);
+        userService.saveUser(user);
 
-        log.info("User registered successfully: {}", appUser);
+        log.info("User registered successfully: {}", user);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new RegisterResponse(
