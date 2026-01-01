@@ -40,6 +40,7 @@ public class UserController {
     public ResponseEntity<RegisterResponse> register(
             @Valid @RequestBody RegisterRequest request
     ) {
+        log.info("Registering user: {}", request);
         User user = new User();
         user.setName(request.getName());
         user.setEmail(request.getEmail());
@@ -52,6 +53,8 @@ public class UserController {
         }
 
         userService.saveUser(user);
+
+        log.info("User registered successfully: {}", user);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new RegisterResponse(
