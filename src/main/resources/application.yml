@@ -20,4 +20,4 @@ server:
   port: 8050
 
 jwt:
-  secret: ${JWT_SECRET_KEY:""}
+  secret: "jxgEQeXHuPq8VdbyYFNkANdudQ53YUn4"
