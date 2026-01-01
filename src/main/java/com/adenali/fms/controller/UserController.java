@@ -88,6 +88,7 @@ public class UserController {
     }
     @GetMapping("/user/get")
     public String get(){
+        log.info("get user<<:>>");
       return "successfull from deply-2";
     }
 
