@@ -28,6 +28,7 @@ public class GatewaySecretFilter extends OncePerRequestFilter {
         String userName = request.getHeader("X-User-Id");
         log.info("Gateway Secret: {} shared secret: {}", requestSecret,sharedSecret);
         if (sharedSecret.equals(requestSecret)) {
+            log.info("Gateway Secret is valid");
             String finalIdentity = (userName != null) ? userName : "System_Gateway";
 
             GatewayAuthenticationToken auth = new GatewayAuthenticationToken(finalIdentity);

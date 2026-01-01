@@ -1,3 +1,6 @@
+server:
+  port: 8050
+
 spring:
   application:
     name: auth-service
@@ -12,3 +15,6 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+
+jwt:
+  secret: ${JWT_SECRET_KEY}

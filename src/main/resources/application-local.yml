@@ -1,3 +1,5 @@
+server:
+  port: 8050
 spring:
   application:
     name: auth-service
@@ -15,3 +17,6 @@ spring:
       hibernate:
         ddl-auto: update
       show-sql: true
+
+jwt:
+  secret: ${JWT_SECRET_KEY}
