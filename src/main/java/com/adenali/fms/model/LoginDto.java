@@ -1,4 +1,4 @@
-package com.adenali.authservice.model;
+package com.adenali.fms.model;
 
 import lombok.Data;
 

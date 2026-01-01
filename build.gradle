@@ -1,12 +1,11 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.5.6'
+    id 'org.springframework.boot' version '3.4.2'
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
-group = 'com.adenali'
+group = 'com.fms'
 version = '0.0.1-SNAPSHOT'
-description = 'auth-service'
 
 java {
     toolchain {
@@ -14,9 +13,13 @@ java {
     }
 }
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
+ext {
+    set('springCloudVersion', "2024.0.1")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
 }
 
@@ -25,28 +28,34 @@ repositories {
 }
 
 dependencies {
-    // Remove the version ':3.1.2' and let the dependency management handle it:
-//    implementation 'io.awspring.cloud:spring-cloud-aws-starter-sqs'
 
-    // You can also remove the version from the SDK as well
-//    implementation 'software.amazon.awssdk:sqs'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+    // Web & Security
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    testImplementation 'org.springframework.security:spring-security-test'
+
+    // Data
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'com.mysql:mysql-connector-j:8.3.0'
     runtimeOnly 'com.h2database:h2'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // Messaging / AWS
+    implementation 'org.springframework.kafka:spring-kafka'
+    implementation 'software.amazon.awssdk:s3:2.26.19'
+
+    // JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5' // or jjwt-gson if you prefer Gson
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
 
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 
-
+    // Tests
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
 }
 
 tasks.named('test') {
