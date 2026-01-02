@@ -2,6 +2,7 @@ package com.adenali.fms.controller;
 
 import com.adenali.fms.exceptions.EmailAlreadyExistsException;
 import com.adenali.fms.model.*;
+import com.adenali.fms.service.JwtService;
 import com.adenali.fms.service.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -28,59 +29,26 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/authservice")
 public class UserController {
     private final UserService userService;
-        private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
-    @Value("${jwt.secret:xyz}")
-    private String JWT_SECRET_DEFAULT_VALUE;
-    public  String JWT_SECRET_KEY = "JWT_SECRET";
-    public static final String JWT_HEADER = "Authorization";
+    private final JwtService jwtService;
+
     @PostMapping("/user/signup")
     public ResponseEntity<RegisterResponse> register(
             @Valid @RequestBody RegisterRequest request
     ) {
-        log.info("Registering user: {}", request);
-        User user = new User();
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(request.getRole());
-        user.setEnabled(false); // force disabled
-
-        if(userService.findUserByEmail(user.getEmail()) != null){
+        if(userService.findUserByEmail(request.getEmail()) != null){
             throw new EmailAlreadyExistsException(request.getEmail());
         }
-
-        userService.saveUser(user);
-
-        log.info("User registered successfully: {}", user);
+        RegisterResponse registerResponse=userService.saveUser(request);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new RegisterResponse(
-                        "Registration successful. Await admin approval",
-                        null
-                ));
+                .body(registerResponse);
     }
 
     @PostMapping("/user/login")
-    public ResponseEntity<LoginResponseDTO> apiLogin (@RequestBody LoginRequestDTO loginRequest) throws Exception {
-        String jwt = "";
-        Authentication authentication = UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.username(),
-                loginRequest.password());
-        Authentication authenticationResponse = authenticationManager.authenticate(authentication);
-        if(null != authenticationResponse && authenticationResponse.isAuthenticated()) {
-            String secret = JWT_SECRET_DEFAULT_VALUE;
-            SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-            jwt = Jwts.builder().issuer("Eazy Bank").subject("JWT Token")
-                    .claim("username", authenticationResponse.getName())
-                    .claim("authorities", authenticationResponse.getAuthorities().stream().map(
-                            GrantedAuthority::getAuthority).collect(Collectors.joining(",")))
-                    .issuedAt(new java.util.Date())
-                    .expiration(new java.util.Date((new java.util.Date()).getTime() + 30000000))
-                    .signWith(secretKey).compact();
-        }
-        return ResponseEntity.status(HttpStatus.OK).header(JWT_HEADER,jwt)
-                .body(new LoginResponseDTO(HttpStatus.OK.getReasonPhrase(), jwt));
+    public ResponseEntity<LoginResponseDTO> apiLogin (@Valid @RequestBody LoginRequestDTO loginRequest)  {
+       return jwtService.apiLogin(loginRequest);
     }
+
     @GetMapping("/user/get")
     public String get(){
         log.info("get user<<:>>");

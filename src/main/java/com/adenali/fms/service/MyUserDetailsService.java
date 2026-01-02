@@ -14,8 +14,10 @@ import java.util.ArrayList;
 public class MyUserDetailsService implements UserDetailsService {
 
 
-    @Autowired
-    private UserService  userService;
+    public MyUserDetailsService(UserService userService) {
+        this.userService = userService;
+    }
+    private final UserService  userService;
 
 
     @Override

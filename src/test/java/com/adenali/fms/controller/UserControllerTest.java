@@ -1,8 +1,10 @@
 package com.adenali.fms.controller;
 
+import com.adenali.fms.exceptions.EmailAlreadyExistsException;
 import com.adenali.fms.model.RegisterRequest;
 import com.adenali.fms.model.Role;
 import com.adenali.fms.model.User;
+import com.adenali.fms.service.JwtService;
 import com.adenali.fms.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -34,6 +36,9 @@ public class UserControllerTest {
     UserService userService;
 
     @MockitoBean
+    JwtService jwtService;
+
+    @MockitoBean
     PasswordEncoder passwordEncoder;
 
     @MockitoBean
@@ -50,9 +55,7 @@ public class UserControllerTest {
         request.setPassword("Password@123");
         request.setRole(Role.DRIVER);
 
-        Mockito.when(userService.findUserByEmail(request.getEmail())).thenReturn(null);
 
-        Mockito.doNothing().when(userService).saveUser(Mockito.any(User.class));
 
         mockMvc.perform(post("/api/authservice/user/signup")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -70,8 +73,7 @@ public class UserControllerTest {
         request.setPassword("Password@123");
         request.setRole(Role.DRIVER);
 
-        Mockito.when(userService.findUserByEmail(request.getEmail())).thenReturn(new User());
-
+        Mockito.doThrow(new EmailAlreadyExistsException("Email already exists")).when(userService).saveUser(request);
 
         mockMvc.perform(post("/api/authservice/user/signup")
                         .contentType(MediaType.APPLICATION_JSON)
