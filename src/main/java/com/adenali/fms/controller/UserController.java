@@ -2,6 +2,7 @@ package com.adenali.fms.controller;
 
 import com.adenali.fms.exceptions.EmailAlreadyExistsException;
 import com.adenali.fms.model.*;
+import com.adenali.fms.service.ActivationService;
 import com.adenali.fms.service.JwtService;
 import com.adenali.fms.service.UserService;
 import io.jsonwebtoken.Jwts;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 public class UserController {
     private final UserService userService;
     private final JwtService jwtService;
+    private final ActivationService activationService;
 
     @PostMapping("/user/signup")
     public ResponseEntity<RegisterResponse> register(
@@ -55,4 +57,11 @@ public class UserController {
       return "successfull from deply-2";
     }
 
+    @GetMapping("/activate")
+    public ResponseEntity<String> activateAccount(
+            @RequestParam("token") String token
+    ) {
+        activationService.activateUser(token);
+        return ResponseEntity.ok("Account activated successfully");
+    }
 }

@@ -4,6 +4,7 @@ import com.adenali.fms.exceptions.EmailAlreadyExistsException;
 import com.adenali.fms.model.RegisterRequest;
 import com.adenali.fms.model.Role;
 import com.adenali.fms.model.User;
+import com.adenali.fms.service.ActivationService;
 import com.adenali.fms.service.JwtService;
 import com.adenali.fms.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,6 +44,9 @@ public class UserControllerTest {
 
     @MockitoBean
     AuthenticationManager authenticationManager;
+
+    @MockitoBean
+    ActivationService activationService;
 
 
     @Test
