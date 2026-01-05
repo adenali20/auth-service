@@ -72,8 +72,7 @@ public class UserService {
 
         activationTokenRepository.save(activationToken);
 
-        // 3️⃣ Send activation email
-        emailService.sendActivationEmail(user.getEmail(), token);
+        // TODO:3️⃣ Send activation email
 
         log.info("User registered successfully, activation email sent to {}", user.getEmail());
 
