@@ -37,6 +37,7 @@ public class UserController {
     public ResponseEntity<RegisterResponse> register(
             @Valid @RequestBody RegisterRequest request
     ) {
+        log.info("creating user with email:{}",request.getEmail());
         if(userService.findUserByEmail(request.getEmail()) != null){
             throw new EmailAlreadyExistsException(request.getEmail());
         }
@@ -48,6 +49,7 @@ public class UserController {
 
     @PostMapping("/user/login")
     public ResponseEntity<LoginResponseDTO> apiLogin (@Valid @RequestBody LoginRequestDTO loginRequest)  {
+        log.info("user {} tried to login",loginRequest.getUsername());
        return jwtService.apiLogin(loginRequest);
     }
 
