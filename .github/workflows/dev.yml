@@ -47,3 +47,19 @@ jobs:
           docker push $IMAGE_NAME:$IMAGE_TAG
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
           echo "✅ Built and pushed: $IMAGE_NAME:$IMAGE_TAG"
+
+      # 7️⃣ Set up kubeconfig for DigitalOcean (DO_KUBECONFIG secret must contain base64 encoded kubeconfig)
+      - name: Set up Kubeconfig
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.DO_KUBECONFIG }}" | base64 -d > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
+          kubectl get nodes
+
+      # 8️⃣ Install / Upgrade Helm chart
+      - name: Deploy Auth Service with Helm
+        run: |
+          helm upgrade --install auth-dev ./auth-chart \
+            -n dev \
+            -f auth-chart/values-dev.yaml \
+            --set image.tag=$IMAGE_TAG

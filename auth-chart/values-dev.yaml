@@ -1,0 +1,16 @@
+replicaCount: 1
+
+image:
+  repository: adenli/auth-service
+  tag: dev-latest
+
+containerPort: 8050
+
+service:
+  type: ClusterIP
+  port: 8050
+
+env:
+  SPRING_PROFILES_ACTIVE: dev
+
+envFromSecret: auth-service-secrets

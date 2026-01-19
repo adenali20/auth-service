@@ -1,0 +1,16 @@
+replicaCount: 1
+
+image:
+  repository: adenli/auth-service
+  tag: latest
+  pullPolicy: IfNotPresent
+
+containerPort: 8050
+
+service:
+  type: ClusterIP
+  port: 8081
+
+env: {}
+
+envFromSecret: auth-service-secrets
