@@ -6,7 +6,7 @@ ARG JAR_FILE=build/libs/*.jar
 COPY ${JAR_FILE} auth-service.jar
 
 # Download OpenTelemetry Java agent
-#ADD https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v1.30.0/opentelemetry-javaagent.jar opentelemetry-javaagent.jar
+ADD https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v1.30.0/opentelemetry-javaagent.jar opentelemetry-javaagent.jar
 
 # Expose the service port
 EXPOSE 8050
@@ -21,5 +21,4 @@ ENV OTEL_LOGS_EXPORTER=otlp
 ENV OTEL_RESOURCE_ATTRIBUTES=deployment.environment=dev
 
 # Run Spring Boot with OTEL agent
-#ENTRYPOINT ["java", "-javaagent:opentelemetry-javaagent.jar", "-jar", "auth-service.jar"]
-ENTRYPOINT ["java",  "-jar", "auth-service.jar"]
+ENTRYPOINT ["java", "-javaagent:opentelemetry-javaagent.jar", "-jar", "auth-service.jar"]
