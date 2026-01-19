@@ -12,7 +12,7 @@ ADD https://github.com/open-telemetry/opentelemetry-java-instrumentation/release
 EXPOSE 8050
 
 # OTEL environment variables for HTTP OTLP
-ENV OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
+ENV OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector-opentelemetry-collector:4318
 ENV OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
 ENV OTEL_SERVICE_NAME=auth-service
 ENV OTEL_TRACES_EXPORTER=otlp
